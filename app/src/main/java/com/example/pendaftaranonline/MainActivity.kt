@@ -8,6 +8,7 @@ import com.example.pendaftaranonline.api.AuthResponse
 import com.example.pendaftaranonline.api.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
+import android.util.Log
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
@@ -30,31 +31,10 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-//            RetrofitClient.instance.login(email, password)
-//                .enqueue(object : Callback<AuthResponse> {
-//                    override fun onResponse(
-//                        call: Call<AuthResponse>,
-//                        response: Response<AuthResponse>
-//                    ) {
-//                        if (response.isSuccessful && response.body()?.success == true) {
-//                            Toast.makeText(this@MainActivity, "Login berhasil!", Toast.LENGTH_SHORT).show()
-//
-//                            // lanjut isi data diri
-//                            startActivity(Intent(this@MainActivity, IsiDataDiriActivity::class.java))
-//                            finish()
-//
-//                        } else {
-//                            Toast.makeText(this@MainActivity, "Login gagal!", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-//                        Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-//                    }
-//                })
             RetrofitClient.instance.login(email, password)
                 .enqueue(object : Callback<AuthResponse> {
                     override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                        Log.d("LOGIN_API", "code=${response.code()} body=${response.body()} errorBody=${response.errorBody()?.string()}")
                         if (response.isSuccessful && response.body()?.success == true) {
                             val user = response.body()?.user
                             val intent = Intent(this@MainActivity, HomeActivity::class.java)
@@ -67,15 +47,17 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                        Log.e("LOGIN_API", "onFailure: ${t.localizedMessage}", t)
                         Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
-
         }
 
-        tvRegister.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-        }
+
+
+
+
+
+
     }
 }

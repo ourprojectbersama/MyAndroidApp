@@ -25,4 +25,12 @@ interface ApiService {
         @Field("jenis_kelamin") jenisKelamin: String
     ): Call<BasicResponse>
 
+    @FormUrlEncoded
+    @POST("register")
+    fun registerUser(
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): Call<RegisterResponse>
+
 }
